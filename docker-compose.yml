@@ -1,0 +1,48 @@
+services:
+  nginx:
+    image: nginx:latest
+    container_name: app-nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.log:/var/log/nginx/access.log:ro
+    command: ["nginx", "-g", "daemon off;"]
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ulimits:
+      memlock: -1
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.13.4
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+
+  fluentd:
+    image: fluent/fluentd:latest
+    container_name: fluentd
+    depends_on:
+      - elasticsearch
+    ports:
+      - "24224:24224"
+    volumes:
+      - ./fluentd.conf:/fluentd/etc/fluentd.conf:ro
+      - ./nginx.log:/var/log/nginx/access.log:ro
+      - ./pos:/fluentd/pos
+
+volumes:
+  es_data:

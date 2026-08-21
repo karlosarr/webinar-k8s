@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: servicio-config
+data:
+  database_host: "db-service"
+  database_port: "5432"
+  log_level: "info"

@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: servicio-job
+spec:
+  backoffLimit: 4
+  template:
+    metadata:
+      labels: 
+        app: job-app
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: task
+        image: busybox:1.31
+        command: ["echo", "Hola desde un Job de Kubernetes", "&&", "sleep", "30"]

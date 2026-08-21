@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: servicio-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: servicio-app
+  template:
+    metadata:
+      labels:
+        app: servicio-app
+    spec:
+      containers:
+      - name: servicio-container
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: servicio-config
+              key: database_host
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: servicio-config
+              key: database_port
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: servicio-config
+              key: log_level
+        - name: USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: servicio-secret
+              key: username
+        - name: PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: servicio-secret
+              key: password
+        resources:
+          requests:
+            cpu: "100m" # Obligatorio para que el HPA pueda medir el uso

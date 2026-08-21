@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: servicio-cronjob
+spec:
+  schedule: "*/5 * * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels: 
+            app: cronjob-app
+        spec:
+          restartPolicy: OnFailure
+          containers:
+          - name: scheduled-task
+            image: busybox:1.31
+            command: ["echo", "Tarea programada ejecutándose a las $(date)", "&&", "sleep", "5"]

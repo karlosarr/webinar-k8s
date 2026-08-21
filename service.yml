@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicio-service
+  labels:
+    app: servicio-app
+spec:
+  type: ClusterIP
+  selector:
+    app: servicio-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
