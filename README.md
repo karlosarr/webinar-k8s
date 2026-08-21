@@ -204,9 +204,9 @@ spec:
       app: web-app
 
 # Resource quotas y LimitRanges - A nivel de namespace
-
-# Liveness y Readiness Probes - Detectar congelados
 ```
+
+**Liveness y Readiness Probes:** ya configuradas en `deployment.yml` (HTTP GET a `/` en el puerto 80). La *readiness* probe evita que el Service enrute tráfico a un pod que aún no está listo; la *liveness* probe hace que Kubernetes reinicie el contenedor si deja de responder ("detectar congelados").
 
 ---
 ## 6️⃣ Docker Compose - Desarrollo Local (opcional)

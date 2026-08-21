@@ -46,3 +46,15 @@ spec:
         resources:
           requests:
             cpu: "100m" # Obligatorio para que el HPA pueda medir el uso
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
